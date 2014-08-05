@@ -23,13 +23,20 @@ TweetStream.configure do |c|
 	c.oauth_token        = config['access_token']
 	c.oauth_token_secret = config['access_token_secret']
 	c.auth_method        = :oauth
-	p config
 end
 
+
 client = TweetStream::Client.new
-client.track "android" do |status|
-	puts status.text
+count = 0
+
+mutex = Mutex.new
+client.track '#android' do |status|
+	mutex.synchronize do
+		count += 1
+	end
+	puts count
 end
+
 
 client.userstream
 
