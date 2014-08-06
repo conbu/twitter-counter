@@ -29,14 +29,21 @@ end
 client = TweetStream::Client.new
 count = 0
 
-mutex = Mutex.new
-client.track '#android' do |status|
-	mutex.synchronize do
-		count += 1
+EventMachine.run do
+	timer = EventMachine::PeriodicTimer.new(1) do
+		$pre_count ||= 0
+		diff_count = count - $pre_count
+		puts diff_count
+		$pre_count = count
 	end
-	puts count
-end
 
+	mutex = Mutex.new
+	client.track '#android' do |status|
+		mutex.synchronize do
+			count += 1
+		end
+	end
+end
 
 client.userstream
 
