@@ -30,15 +30,15 @@ client = TweetStream::Client.new
 count = 0
 
 EventMachine.run do
-	timer = EventMachine::PeriodicTimer.new(1) do
+	timer = EventMachine::PeriodicTimer.new(60) do
 		$pre_count ||= 0
 		diff_count = count - $pre_count
-		puts diff_count
+		puts "#{diff_count}: #{Time.now.to_s}"
 		$pre_count = count
 	end
 
 	mutex = Mutex.new
-	client.track '#android' do |status|
+	client.track '#lldiver' do |status|
 		mutex.synchronize do
 			count += 1
 		end
