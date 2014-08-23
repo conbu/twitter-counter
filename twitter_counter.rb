@@ -9,6 +9,8 @@ require 'pit'
 require 'oauth'
 require 'tweetstream'
 
+$stdout.sync = true
+
 config = Pit.get("twitter",
 				 :require => {
 	'consumer_key' => 'client CONSUMER_KEY',
